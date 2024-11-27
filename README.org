@@ -1,0 +1,43 @@
+* Old Working code
++ Iski API key expire ho chuki hai thats why its not working.
+  #+begin_src go
+package main
+
+import(
+	"fmt"
+	"io" // Ye package bhi mene import kia hai
+	"net/http"
+)
+
+func main(){
+	// res, err := http.Get("https://api.open-meteo.com/v1/forecast?latitude=28.6139&longitude=77.2090&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m")
+
+	res, err := http.Get("http://api.weatherapi.com/v1/current.json?key=2e5c78929404457bb32205517231112&q=New Delhi&aqi=no")
+
+	if err != nil{
+		panic(err)
+	}
+
+	defer res.Body.Close()
+
+	// IDK ye kyu kr rha hu me
+
+	if res.StatusCode != 200{ // YAHA AGAR 200 KE ALAVA KUCH AUR LIKHA TO GANDI ERROR DEGA YE
+		panic("The Weather API is not available.. Kuch aur jugaad kro!!")
+	}
+
+	// Ab JSON response ko laaunga me
+
+	body, err := io.ReadAll(res.Body) // <<=== ISSE MENE RESPONSE NIKALA HAI BODY KA i.e. JSON RESPONSE
+
+	if err != nil{
+		panic(err)
+	}
+
+	// aur to aur "body" ek string type hai shayd...To check this run this
+
+	//	fmt.Printf("The type of body is: %T", body)
+
+	fmt.Println(string(body)) // Isse JSON Print ho rha hai
+}
+  #+end_src
